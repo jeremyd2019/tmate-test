@@ -18,10 +18,14 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          repository: 'fritzing/fritzing-app'
+          ref: CD-498
+          path: fritzing-app
       - uses: msys2/setup-msys2@v2
         with:
           release: false
           update: true
-          install: mingw-w64-x86_64-qt5
+          install: mingw-w64-x86_64-qt5 mingw-w64-x86_64-boost mingw-w64-x86_64-libgit2 git
       - name: tmate
         uses: mxschmitt/action-tmate@v3.1

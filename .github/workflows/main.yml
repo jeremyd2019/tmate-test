@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Go
 
 # Controls when the action will run. 
 on:
@@ -10,7 +10,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  go:
+  tmate-fritzing:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
@@ -22,6 +22,12 @@ jobs:
           repository: 'fritzing/fritzing-app'
           ref: CD-498
           path: fritzing-app
+          fetch-depth: 0
+      - uses: actions/checkout@v2
+        with:
+          repository: 'fritzing/fritzing-parts'
+          ref: master
+          path: fritzing-parts
       - uses: msys2/setup-msys2@v2
         with:
           release: false

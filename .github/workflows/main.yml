@@ -10,28 +10,16 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  tmate-fritzing:
+  tmate:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        with:
-          repository: 'fritzing/fritzing-app'
-          ref: CD-498
-          path: fritzing-app
-          fetch-depth: 0
-      - uses: actions/checkout@v2
-        with:
-          repository: 'fritzing/fritzing-parts'
-          ref: master
-          path: fritzing-parts
       - uses: msys2/setup-msys2@v2
         with:
           release: false
           update: true
-          install: mingw-w64-x86_64-qt5 mingw-w64-x86_64-boost mingw-w64-x86_64-libgit2 git
+          install: git
       - name: tmate
         uses: mxschmitt/action-tmate@v3.1

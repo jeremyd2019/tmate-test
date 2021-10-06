@@ -22,4 +22,4 @@ jobs:
           update: true
           install: git
       - name: tmate
-        uses: mxschmitt/action-tmate@v3.1
+        uses: mxschmitt/action-tmate@v3

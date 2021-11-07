@@ -23,3 +23,6 @@ jobs:
           install: git
       - name: tmate
         uses: mxschmitt/action-tmate@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MSYS: enable_pcon

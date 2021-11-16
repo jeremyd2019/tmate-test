@@ -6,13 +6,25 @@ name: Go
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      staging:
+        description: 'Update from staging'
+        required: false
+        default: false
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  MSYS: nonativeinnerlinks enable_pcon
+
 jobs:
   # This workflow contains a single job called "build"
   tmate:
     # The type of runner that the job will run on
     runs-on: windows-2022
+
+    defaults:
+      run:
+        shell: msys2 {0}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -21,8 +33,18 @@ jobs:
           release: false
           update: true
           install: git
+      - name: Update from staging
+        if: ${{ github.event.inputs.staging }}
+        continue-on-error: true
+        run: |
+          grep -qF "[staging]" /etc/pacman.conf || sed -i "/\[mingw32\]/i [staging]\nServer = https://repo.msys2.org/staging/\nSigLevel = Never\n" /etc/pacman.conf
+          pacman --noconfirm --noprogressbar --overwrite '*' -Syuu
+      - name: Update from staging 2
+        if: ${{ github.event.inputs.staging }}
+        continue-on-error: true
+        run: |
+          pacman --noconfirm --noprogressbar --overwrite '*' -Syuu
       - name: tmate
         uses: mxschmitt/action-tmate@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MSYS: enable_pcon

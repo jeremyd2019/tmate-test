@@ -28,11 +28,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
       - uses: msys2/setup-msys2@v2
         with:
           release: false
           update: true
-          install: git
       - name: Update from staging
         if: ${{ github.event.inputs.staging }}
         continue-on-error: true

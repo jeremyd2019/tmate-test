@@ -35,13 +35,13 @@ jobs:
           update: true
           install: git
       - name: Update from staging
-        if: ${{ github.event.inputs.staging }}
+        if: ${{ github.event.inputs.staging && github.event.inputs.staging != 'false' }}
         continue-on-error: true
         run: |
           grep -qFx '[staging]' /etc/pacman.conf || sed -i '/^# \[staging\]/,/^$/ s|^# ||g' /etc/pacman.conf
           pacman --noconfirm --noprogressbar --overwrite '*' -Syuu
       - name: Update from staging 2
-        if: ${{ github.event.inputs.staging }}
+        if: ${{ github.event.inputs.staging && github.event.inputs.staging != 'false' }}
         continue-on-error: true
         run: |
           pacman --noconfirm --noprogressbar --overwrite '*' -Syuu

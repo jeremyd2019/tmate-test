@@ -37,7 +37,7 @@ jobs:
         if: ${{ github.event.inputs.staging }}
         continue-on-error: true
         run: |
-          grep -qF "[staging]" /etc/pacman.conf || sed -i "/\[mingw32\]/i [staging]\nServer = https://repo.msys2.org/staging/\nSigLevel = Never\n" /etc/pacman.conf
+          grep -qFx '[staging]' /etc/pacman.conf || sed -i '/^# \[staging\]/,/^$/ s|^# ||g' /etc/pacman.conf
           pacman --noconfirm --noprogressbar --overwrite '*' -Syuu
       - name: Update from staging 2
         if: ${{ github.event.inputs.staging }}

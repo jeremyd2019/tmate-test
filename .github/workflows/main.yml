@@ -9,6 +9,7 @@ on:
     inputs:
       staging:
         description: 'Update from staging'
+        type: boolean
         required: false
         default: false
 

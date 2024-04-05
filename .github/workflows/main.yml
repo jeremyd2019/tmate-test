@@ -34,7 +34,6 @@ jobs:
           release: false
           update: true
           path-type: inherit
-          install: git
       - name: Update from staging
         if: ${{ github.event.inputs.staging && github.event.inputs.staging != 'false' }}
         continue-on-error: true

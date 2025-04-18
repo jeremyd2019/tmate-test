@@ -21,7 +21,7 @@ jobs:
   # This workflow contains a single job called "build"
   tmate:
     # The type of runner that the job will run on
-    runs-on: windows-2022
+    runs-on: windows-11-arm
 
     defaults:
       run:
@@ -29,9 +29,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: msys2/setup-msys2@v2
+      - id: msys2
+        uses: msys2/setup-msys2@v2
         with:
-          release: false
           update: true
           path-type: inherit
       - name: Update from staging
@@ -46,6 +46,8 @@ jobs:
         run: |
           pacman --noconfirm --noprogressbar --overwrite '*' -Syuu
       - name: tmate
-        uses: mxschmitt/action-tmate@v3
+        uses: jeremyd2019/action-tmate@master
+        with:
+          msys2-location: ${{ steps.msys2.outputs.msys2-location }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

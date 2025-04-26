@@ -12,6 +12,11 @@ on:
         type: boolean
         required: false
         default: false
+      arm64:
+        description: 'Use windows-11-arm runner'
+        type: boolean
+        required: false
+        default: false
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 env:
@@ -21,7 +26,7 @@ jobs:
   # This workflow contains a single job called "build"
   tmate:
     # The type of runner that the job will run on
-    runs-on: windows-2025
+    runs-on: ${{ inputs.arm64 && 'windows-11-arm' || 'windows-2025' }}
 
     defaults:
       run:
@@ -32,21 +37,23 @@ jobs:
       - id: msys2
         uses: msys2/setup-msys2@v2
         with:
-          release: false
+          release: true
           update: true
           path-type: inherit
       - name: Update from staging
-        if: ${{ github.event.inputs.staging && github.event.inputs.staging != 'false' }}
+        if: ${{ inputs.staging }}
         continue-on-error: true
         run: |
           grep -qFx '[staging]' /etc/pacman.conf || sed -i '/^# \[staging\]/,/^$/ s|^# ||g' /etc/pacman.conf
           pacman --noconfirm --noprogressbar --overwrite '*' -Syuu
       - name: Update from staging 2
-        if: ${{ github.event.inputs.staging && github.event.inputs.staging != 'false' }}
+        if: ${{ inputs.staging }}
         continue-on-error: true
         run: |
           pacman --noconfirm --noprogressbar --overwrite '*' -Syuu
       - name: tmate
-        uses: jeremyd2019/action-tmate@master
+        uses: mxschmitt/action-tmate@v3
+        with:
+          msys2-location: ${{ steps.msys2.outputs.msys2-location }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
